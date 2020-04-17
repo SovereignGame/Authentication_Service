@@ -25,10 +25,7 @@ data class Account (
         var password: String = "",
 
         @get: JsonIgnore
-        val salt: String = "",
-
-        @get: JsonIgnore
-        val lastPlayedVersion: Int = 0
+        val salt: String = ""
 ){
        constructor(username: String) : this(username=username, salt = "123asdfghjklqwertyuiozxcvbnm")
 }

@@ -5,22 +5,20 @@ import com.sovereign.authService.model.Session
 import com.sovereign.authService.repository.AccountRepository
 import com.sovereign.authService.repository.SessionRepository
 import com.sovereign.authService.service.LoginService
+import com.sovereign.authService.service.SessionService
 import org.joda.time.Instant
 import org.springframework.http.HttpHeaders
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import java.util.*
 import javax.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/api")
-class SessionController(private val sessionRepository: SessionRepository,
+@RequestMapping("/authservice/session")
+class SessionController(private val sessionService: SessionService, private val sessionRepository: SessionRepository,
                         private val accountRepository: AccountRepository) {
 
 
@@ -28,7 +26,7 @@ class SessionController(private val sessionRepository: SessionRepository,
     @PostMapping("/login")
     fun doLogin(@Valid @RequestBody loginData: LoginData): ResponseEntity<String> {
         val account = accountRepository.getByUsername(loginData.username)
-        if (account==null || LoginService.getHashedPassword(loginData.password, account.salt) == account.password) {
+        if (account == null || LoginService.getHashedPassword(loginData.password, account.salt) == account.password) {
             sessionRepository.deleteAllByUsername(loginData.username)
             val headers = HttpHeaders()
             return ResponseEntity
@@ -40,19 +38,13 @@ class SessionController(private val sessionRepository: SessionRepository,
             sessionRepository.deleteAllByExpiresLessThan(Instant.now().millis)
             return ResponseEntity("Wrong combination of Username and Password", HttpStatus.UNAUTHORIZED)
         }
-
     }
 
-    //TODO make session update.
-    /*
-    @PostMapping("resumeSession")
-    fun resumeSession(@Valid @RequestBody session: Session):ResponseEntity<String> {
-         if (isAuthenticated(session.token,session.username)) {
-             return ResponseEntity.ok()body(session.token)
-        } else {
-            return ResponseEntity("Unauthorized", HttpStatus.UNAUTHORIZED)
-        }
-    }*/
+    @GetMapping("/checkAuthentication/{username}")
+    fun checkAuthentication(@PathVariable("username") username: String, @RequestParam auth: String): Boolean {
+        //session[0] = token, session[1] = username
+        return sessionService.isAuthenticated(auth, username)
+    }
 
     fun flushSessions(username: String) {
         sessionRepository.deleteAllByExpiresLessThan(Instant.now().millis)

@@ -2,16 +2,31 @@ package com.sovereign.authService.controller
 
 import com.sovereign.authService.model.Account
 import com.sovereign.authService.model.object_parameters.LoginData
-import com.sovereign.authService.service.LoginService
 import com.sovereign.authService.repository.AccountRepository
+import com.sovereign.authService.service.LoginService
+import org.slf4j.LoggerFactory
+import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.annotation.Resource
 import javax.validation.Valid
 
+
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/authservice/account")
 class AccountController(private val accountRepository: AccountRepository) {
+
+    private val LOG = LoggerFactory.getLogger(AccountController::class.java)
+
+    @Resource
+    var env: Environment? = null
+
+    @GetMapping("/test")
+    fun testFun():Int{
+        LOG.info("Went thorugh")
+        return Integer.parseInt(env?.getProperty("local.server.port"))
+    }
 
 
     //TODO add validation and response

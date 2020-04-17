@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface AccountRepository : JpaRepository<Account, String>{
     fun getByUsername(username: String):Account?
+
 }
 
