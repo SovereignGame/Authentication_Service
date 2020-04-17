@@ -17,12 +17,12 @@ data class Account (
         @Size(min = 3, max = 32)
         var username: String = "",
 
-        val alias: String? = null,
-
         @Size(min = 8)
         @get:JsonIgnore
         @set:JsonProperty
         var password: String = "",
+
+        val alias: String? = null,
 
         @get: JsonIgnore
         val salt: String = ""

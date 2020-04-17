@@ -26,7 +26,7 @@ class SessionController(private val sessionService: SessionService, private val 
     @PostMapping("/login")
     fun doLogin(@Valid @RequestBody loginData: LoginData): ResponseEntity<String> {
         val account = accountRepository.getByUsername(loginData.username)
-        if (account == null || LoginService.getHashedPassword(loginData.password, account.salt) == account.password) {
+        if (account != null && LoginService.getHashedPassword(loginData.password, account.salt) == account.password) {
             sessionRepository.deleteAllByUsername(loginData.username)
             val headers = HttpHeaders()
             return ResponseEntity
@@ -34,10 +34,9 @@ class SessionController(private val sessionService: SessionService, private val 
                     .headers(headers)
                     .body(createSession(loginData.username))
 
-        } else {
-            sessionRepository.deleteAllByExpiresLessThan(Instant.now().millis)
-            return ResponseEntity("Wrong combination of Username and Password", HttpStatus.UNAUTHORIZED)
         }
+        return ResponseEntity("Wrong combination of Username and Password", HttpStatus.UNAUTHORIZED)
+
     }
 
     @GetMapping("/checkAuthentication/{username}")
