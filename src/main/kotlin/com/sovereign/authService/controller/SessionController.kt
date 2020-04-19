@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/authservice/session")
+@RequestMapping("/authenticationService/session")
 class SessionController(private val sessionService: SessionService, private val sessionRepository: SessionRepository,
                         private val accountRepository: AccountRepository) {
 

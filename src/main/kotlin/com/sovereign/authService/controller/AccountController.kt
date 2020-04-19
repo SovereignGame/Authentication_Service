@@ -14,7 +14,7 @@ import javax.validation.Valid
 
 
 @RestController
-@RequestMapping("/authservice/account")
+@RequestMapping("/authenticationService/account")
 class AccountController(private val accountRepository: AccountRepository) {
 
     private val LOG = LoggerFactory.getLogger(AccountController::class.java)
