@@ -4,7 +4,7 @@ import com.sovereign.authService.model.object_parameters.LoginData
 import com.sovereign.authService.model.Session
 import com.sovereign.authService.repository.AccountRepository
 import com.sovereign.authService.repository.SessionRepository
-import com.sovereign.authService.service.LoginService
+import com.sovereign.authService.service.AccountService
 import com.sovereign.authService.service.SessionService
 import org.joda.time.Instant
 import org.springframework.http.HttpHeaders
@@ -26,7 +26,7 @@ class SessionController(private val sessionService: SessionService, private val 
     @PostMapping("/login")
     fun doLogin(@Valid @RequestBody loginData: LoginData): ResponseEntity<String> {
         val account = accountRepository.getByUsername(loginData.username)
-        if (account != null && LoginService.getHashedPassword(loginData.password, account.salt) == account.password) {
+        if (account != null && AccountService.getHashedPassword(loginData.password, account.salt) == account.password) {
             sessionRepository.deleteAllByUsername(loginData.username)
             val headers = HttpHeaders()
             return ResponseEntity
