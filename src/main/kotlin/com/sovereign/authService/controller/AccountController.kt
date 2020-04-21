@@ -9,6 +9,7 @@ import org.springframework.core.env.Environment
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.annotation.PostConstruct
 import javax.annotation.Resource
 import javax.validation.Valid
 
@@ -67,6 +68,11 @@ class AccountController(private val accountRepository: AccountRepository) {
             return ResponseEntity<Any>(HttpStatus.OK)
         }
         return ResponseEntity<Any>(HttpStatus.CONFLICT)
+    }
+
+    @PostConstruct
+    private fun postConstruct() {
+        LOG.info("Testuser created: "+ createNewAccount(LoginData("TestUser","password")))
     }
 
 
