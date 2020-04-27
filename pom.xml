@@ -84,7 +84,7 @@
 			<version>1.5.7</version>
 		</dependency>
 
-		<!-- mysql-->
+		<!-- mysql
         <dependency>
             <groupId>com.github.jasync-sql</groupId>
             <artifactId>jasync-mysql</artifactId>
@@ -95,7 +95,7 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-
+-->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.1-api</artifactId>
